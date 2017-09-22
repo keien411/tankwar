@@ -1,0 +1,30 @@
+# Build and Release Folders
+bin/
+bin-debug/
+bin-release/
+
+# Other files and folders
+.settings/
+.idea/
+.vs/
+library/
+local/
+temp/
+publish/
+assets/script/.idea/
+Debug.win32/
+
+assets/resources/configs/
+
+jsb-default/frameworks/runtime-src/proj.android-studio/app/assets/res/
+
+
+# Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
+# should NOT be excluded as they contain compiler settings and other important
+# information for Eclipse / Flash Builder.
+*.class
+jsb-default/frameworks/runtime-src/proj.win32/HZ.VC.VC.opendb
+jsb-default/frameworks/runtime-src/proj.win32/HZ.VC.db
+*.tlog
+assets/resources/configs.meta
+assets/script/Card13/ui/Card13UISetEndSpecialCard.js___jb_tmp___.meta
