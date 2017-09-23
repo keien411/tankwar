@@ -20,8 +20,12 @@ cc.Class({
             default: null,
             type: cc.Prefab,
         },
-        //最大数量
+        //场上一次性出现最大数量
         maxCount: 5,
+
+        //一句敌机最大数量
+        maxDIJiCount: 7,
+
         //出生地
         bornPoses: {
             default: [],
@@ -48,7 +52,12 @@ cc.Class({
             default: [],
             type: cc.Integer,
         },
-        
+
+        //分数
+        score: cc.Label,
+
+        //敌机数量
+        dijiNum: cc.Label,
 
     },
 
@@ -61,6 +70,9 @@ cc.Class({
         this._qiangCtrl = this.qiang.getComponent("QiangCtrl");
         //获取地图 TiledMap 组件
         this._tiledMap = this.curMap.getComponent('cc.TiledMap');
+
+        this.shengchanInit = 0;
+        this.initScore();
 
     },
 
@@ -118,7 +130,7 @@ cc.Class({
         this._playerTankCtrl = this.player.getComponent("TankScript"); 
 
         //启动定时器，添加坦克
-        this.schedule(this.addAITank,3,cc.macro.REPEAT_FOREVER,1);
+        this.schedule(this.addAITank,10,cc.macro.REPEAT_FOREVER,1);
         
     },
 
@@ -287,8 +299,15 @@ cc.Class({
 
     //加入AI
     addAITank: function(dt, team) {
-        if(this.tankPool.size()>0){
+
+
+        let isShengChan = this.shengchanInit < this.maxDIJiCount;
+
+        //cc.log("isShengChan",isShengChan,"this.tankPool.size()",this.tankPool.size());
+        if(this.tankPool.size()>0 && isShengChan && this.maxDIJiCount > 0){
             var tank = this.tankPool.get();
+            this.shengchanInit += 1;
+            //cc.log("场上敌机",this.shengchanInit);
             var index = parseInt(Math.random()*3, 10);
             //获取坦克控制组件
             var tankCtrl = tank.getComponent("TankScript");
@@ -341,6 +360,8 @@ cc.Class({
         tank.parent = null;
         tank.getComponent("TankScript").die = true;
         this.tankPool.put(tank);
+        this.checkScore(1,1);
+        this.shengchanInit -= 1;
         if(cc.gameData.single && tank.getComponent("TankScript").team == 0){
             cc.director.loadScene("StartScene");
         }
@@ -352,6 +373,22 @@ cc.Class({
             //播放射击音效
             cc.audioEngine.play(this._playerTankCtrl.shootAudio, false, 1);
         }
+    },
+
+    //初始化分数
+    initScore:function () {
+        this.score.string = "分数：" + "0";
+        this.dijiNum.string = "敌机：" + (this.maxDIJiCount);
+    },
+
+    //计算分数
+    checkScore:function (score,num) {
+        let agoScore = this.score.string.slice(3,this.score.string.length);
+        agoScore = parseInt(agoScore) + score;
+        let agodijiNum = this.dijiNum.string.slice(3,this.dijiNum.string.length);
+        this.score.string = "分数：" + (agoScore);
+        this.dijiNum.string = "敌机：" + (agodijiNum-num);
+        this.maxDIJiCount -=num;
     },
 
     //销毁时调用
