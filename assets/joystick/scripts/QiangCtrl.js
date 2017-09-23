@@ -10,9 +10,9 @@ cc.Class({
 
     properties: {
        
-        radius: 0, //°ë¾¶
+        radius: 0, //åŠå¾„
         touchType: {
-            default: TouchType.DEFAULT, //´¥ÃşÀàĞÍ
+            default: TouchType.DEFAULT, //è§¦æ‘¸ç±»å‹
             type: TouchType
         },
    
@@ -22,10 +22,12 @@ cc.Class({
     onLoad: function () {
         
         this.registerInput()
-        
-       
-        this.initPos = this.node.position
 
+
+        this.initPos = this.node.getPosition();
+        cc.log("qiang init",this.initPos);
+
+        //è®¾ç½®é€æ˜åº¦
         this.node.opacity = 50
 
     },
@@ -54,11 +56,11 @@ cc.Class({
 
     onTouchBegan: function (touch, event) {
         this.node.opacity = 100;
-        //Èç¹û´¥ÃşÀàĞÍÎªFOLLOW£¬ÔòÒ¡¿Ø¸ËµÄÎ»ÖÃÎª´¥ÃşÎ»ÖÃ,´¥Ãş¿ªÊ¼Ê±ºòÏÖĞÎ
+        //å¦‚æœè§¦æ‘¸ç±»å‹ä¸ºFOLLOWï¼Œåˆ™æ‘‡æ§æ†çš„ä½ç½®ä¸ºè§¦æ‘¸ä½ç½®,è§¦æ‘¸å¼€å§‹æ—¶å€™ç°å½¢
         if (this.touchType == TouchType.FOLLOW) {
            
             var touchPos = this.node.parent.convertToNodeSpaceAR(touch.getLocation());
-            if (touchPos.x - this.node.width / 2 < 0) { //ÔÚÆÁÄ»µÄÓÒ°ë²àµã»÷
+            if (touchPos.x - this.node.width / 2 < 0) { //åœ¨å±å¹•çš„å³åŠä¾§ç‚¹å‡»
                 //event.stopPropagation();
                 return false;
             }
@@ -66,10 +68,10 @@ cc.Class({
             return true;
         }
         else {
-            //°Ñ´¥Ãşµã×ø±ê×ª»»ÎªÏà¶ÔÓëÄ¿±êµÄÄ£ĞÍ×ø±ê
+            //æŠŠè§¦æ‘¸ç‚¹åæ ‡è½¬æ¢ä¸ºç›¸å¯¹ä¸ç›®æ ‡çš„æ¨¡å‹åæ ‡
             var touchPos = this.node.convertToNodeSpaceAR(touch.getLocation())
 
-            if (touchPos.getPosition().x - this.node.weight / 2 < 0) { //ÔÚÆÁÄ»µÄÓÒ°ë²àµã»÷
+            if (touchPos.x - this.node.width / 2 < 0) {  //åœ¨å±å¹•çš„å³åŠä¾§ç‚¹å‡»
                 return false;
             }
             
@@ -90,9 +92,10 @@ cc.Class({
 
         this.isKaiQiang(true);
 
-        //Èç¹û´¥ÃşÀàĞÍÎªFOLLOW£¬Àë¿ª´¥ÃşºóÒş²Ø
+        //å¦‚æœè§¦æ‘¸ç±»å‹ä¸ºFOLLOWï¼Œç¦»å¼€è§¦æ‘¸åéšè—a
         if (this.touchType == TouchType.FOLLOW) {
-            this.node.position = this.initPos
+            this.node.setPosition(this.initPos);
+            cc.log("qiang end",this.node.getPosition());
         }
 
 

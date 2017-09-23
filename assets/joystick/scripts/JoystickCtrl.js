@@ -51,7 +51,7 @@ cc.Class({
         this.registerInput()
         this.distance = 0
         this.curAngle = 0
-        this.initPos = this.node.position
+        this.initPos = this.node.getPosition();
         
         this.node.opacity = 50
 
@@ -159,7 +159,7 @@ cc.Class({
 
         //如果触摸类型为FOLLOW，离开触摸后隐藏
         if(this.touchType == TouchType.FOLLOW){
-            this.node.position = this.initPos
+            this.node.setPosition(this.initPos);
         }
         //摇杆恢复位置
         this.joystickBar.setPosition(cc.p(0,0));
