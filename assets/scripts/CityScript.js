@@ -24,7 +24,7 @@ cc.Class({
         maxCount: 5,
 
         //一句敌机最大数量
-        maxDIJiCount: 7,
+        maxDIJiCount: 10,
 
         //出生地
         bornPoses: {
@@ -130,7 +130,7 @@ cc.Class({
         this._playerTankCtrl = this.player.getComponent("TankScript"); 
 
         //启动定时器，添加坦克
-        this.schedule(this.addAITank,10,cc.macro.REPEAT_FOREVER,1);
+        this.schedule(this.addAITank,3,cc.macro.REPEAT_FOREVER,1);
         
     },
 
@@ -364,6 +364,9 @@ cc.Class({
         this.shengchanInit -= 1;
         if(cc.gameData.single && tank.getComponent("TankScript").team == 0){
             cc.director.loadScene("StartScene");
+        }
+        if (this.maxDIJiCount == 0){
+            cc.director.loadScene("ChoiceScene");
         }
     },
 
