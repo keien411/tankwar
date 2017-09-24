@@ -1,5 +1,5 @@
 var TankType = require("TankData").tankType;
-
+var app = require("app");
 cc.Class({
     extends: cc.Component,
 
@@ -7,6 +7,10 @@ cc.Class({
 
         //地图
         curMap: cc.TiledMap,
+
+        //关卡地图
+        curTiledMap: [cc.TiledMapAsset],
+
         //摇杆
         yaogan: cc.Node,
 
@@ -64,12 +68,17 @@ cc.Class({
     // use this for initialization
     onLoad: function () {
         cc.director.setDisplayStats(true);
+
+        this.LocalDataManager = app.LocalDataManager();
+        this.level = this.LocalDataManager.GetConfigProperty("SysSetting","choeseLevel");
         //获取摇杆控制组件
         this._joystickCtrl = this.yaogan.getComponent("JoystickCtrl");
         //获枪组件
         this._qiangCtrl = this.qiang.getComponent("QiangCtrl");
         //获取地图 TiledMap 组件
         this._tiledMap = this.curMap.getComponent('cc.TiledMap');
+        
+        this._tiledMap.tmxAsset = this.curTiledMap[this.level-1];
 
         this.shengchanInit = 0;
         this.initScore();

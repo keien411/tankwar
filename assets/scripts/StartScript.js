@@ -1,4 +1,4 @@
-
+var app = require("app");
 cc.Class({
     extends: cc.Component,
 
@@ -21,7 +21,33 @@ cc.Class({
         if(!cc.globalData){
             cc.globalData = {};
         }
+
+        if(!this.InitModel()){
+            this.ErrLog("OnInitClientFinish InitModel fail");
+            return
+        }
         
+    },
+
+    //初始化模块
+    InitModel:function(){
+        let modelName = "";
+        try{
+            let NeedCreateList = app.NeedCreateList;
+            let count = NeedCreateList.length;
+            for(let index=0; index<count; index++){
+                modelName = NeedCreateList[index];
+                //设置所有单例引用接口到app
+                app[modelName] = require(modelName).GetModel;
+                cc.log("OnLoad require(%s)", modelName);
+            }
+        }
+        catch(error){
+            cc.log("OnLoad require(%s) error:%s", modelName, error.stack);
+            return false
+        }
+
+        return true;
     },
 
     loadChoiceScene: function() {

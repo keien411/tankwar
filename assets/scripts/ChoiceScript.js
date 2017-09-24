@@ -1,3 +1,4 @@
+var app = require("app");
 cc.Class({
     extends: cc.Component,
 
@@ -18,8 +19,10 @@ cc.Class({
 
     // use this for initialization
     onLoad: function () {
-        cc.gameData = {};
-        cc.gameData.curLevel = 1;
+
+        this.LocalDataManager = app.LocalDataManager();
+        this.level = this.LocalDataManager.GetConfigProperty("SysSetting","choeseLevel");
+
         this.updateLevelLabel();
     },
 
@@ -29,30 +32,32 @@ cc.Class({
         cc.loader.onProgress = function (completedCount, totalCount, item){
             console.log(completedCount+"/"+totalCount);
         };
-        cc.director.preloadScene("CityScene"+ cc.gameData.curLevel, function (assets, error){
+        cc.director.preloadScene("CityScene1", function (assets, error){
+            //設置關卡
+            app.LocalDataManager().SetConfigProperty("SysSetting", "choeseLevel", self.level);
             //跳转到游戏界面
-            cc.director.loadScene("CityScene"+ cc.gameData.curLevel);
+            cc.director.loadScene("CityScene1");
         });
     },
 
     onUp: function () {
-        if(cc.gameData.curLevel-1 <= 0){
+        if(this.level-1 <= 0){
             return;
         }
-        cc.gameData.curLevel -= 1; 
+        this.level -= 1;
         this.updateLevelLabel();
     },
 
     onNext: function () {
-        if(cc.gameData.curLevel+1 > 20){
+        if(this.level+1 > 20){
             return;
         }
-        cc.gameData.curLevel += 1; 
+        this.level += 1;
         this.updateLevelLabel();
     },
 
     updateLevelLabel: function () {
-        this.curLevelLabel.string = "Round "+cc.gameData.curLevel;
+        this.curLevelLabel.string = "Round "+this.level;
     },
 
 
