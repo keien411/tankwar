@@ -118,7 +118,7 @@ cc.Class({
     //判断是否与其他坦克碰撞
     collisionTank: function(rect) {
         for(var i=0; i<cc.gameData.tankList.length; i++){
-            var tank = cc.gameData.tankList[i]
+            var tank = cc.gameData.tankList[i];
             if(this.node === tank){
                 continue;
             }

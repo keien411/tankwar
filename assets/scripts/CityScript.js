@@ -357,9 +357,18 @@ cc.Class({
     },
 
     tankBoom: function(tank) {
-        tank.parent = null;
+
+        
         tank.getComponent("TankScript").die = true;
-        this.tankPool.put(tank);
+
+        if(cc.isValid(tank)){
+
+            tank.parent = null;
+            this.tankPool.put(tank);
+        }
+
+        cc.gameData.tankList.splice(this.checkTank(tank),1);
+
         this.checkScore(1,1);
         this.shengchanInit -= 1;
         if(cc.gameData.single && tank.getComponent("TankScript").team == 0){
@@ -392,6 +401,15 @@ cc.Class({
         this.score.string = "分数：" + (agoScore);
         this.dijiNum.string = "敌机：" + (agodijiNum-num);
         this.maxDIJiCount -=num;
+    },
+
+    checkTank:function (tank) {
+        for(let i = 0;i < cc.gameData.tankList.length; ++i){
+            if (cc.gameData.tankList[i] == tank){
+                return i;
+            }
+        }
+        return -1;
     },
 
     //销毁时调用
