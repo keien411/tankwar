@@ -25,7 +25,6 @@ cc.Class({
 
 
         this.initPos = this.node.getPosition();
-        cc.log("qiang init",this.initPos);
 
         //设置透明度
         this.node.opacity = 50
@@ -88,14 +87,13 @@ cc.Class({
     },
     onTouchEnded: function (touch, event) {
 
-        this.node.opacity = 50
+        this.node.opacity = 50;
 
         this.isKaiQiang(true);
 
         //如果触摸类型为FOLLOW，离开触摸后隐藏a
         if (this.touchType == TouchType.FOLLOW) {
             this.node.setPosition(this.initPos);
-            cc.log("qiang end",this.node.getPosition());
         }
 
 
