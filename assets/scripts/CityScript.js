@@ -30,6 +30,9 @@ cc.Class({
         //一句敌机最大数量
         maxDIJiCount: 10,
 
+        //一句时间
+        maxTime: 300,
+
         //出生地
         bornPoses: {
             default: [],
@@ -63,6 +66,9 @@ cc.Class({
         //敌机数量
         dijiNum: cc.Label,
 
+        //倒计时
+        timeNum: cc.Label,
+
     },
 
     // use this for initialization
@@ -81,6 +87,8 @@ cc.Class({
         this._tiledMap.tmxAsset = this.curTiledMap[this.level-1];
 
         this.shengchanInit = 0;
+
+        this.time = 0;
         this.initScore();
 
     },
@@ -400,6 +408,7 @@ cc.Class({
     initScore:function () {
         this.score.string = "分数：" + "0";
         this.dijiNum.string = "敌机：" + (this.maxDIJiCount);
+        this.timeNum.string = "时间：" + (this.maxTime);
     },
 
     //计算分数
@@ -419,6 +428,21 @@ cc.Class({
             }
         }
         return -1;
+    },
+
+    // called every frame, uncomment this function to activate update callback
+    update: function (dt) {
+
+        this.time += dt;
+        if (this.time > 1){
+            this.timeNum.string = "时间：" + (this.maxTime--);
+            this.time = 0;
+        }
+
+        if (this.maxTime < 0){
+            cc.director.loadScene("StartScene");
+        }
+
     },
 
     //销毁时调用
