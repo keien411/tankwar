@@ -1544,7 +1544,7 @@
     "tank": {
       "__uuid__": "e14e3534-aa94-462d-9f40-58b2fda3c4b5"
     },
-    "maxCount": 6,
+    "maxCount": 5,
     "maxDIJiCount": 10,
     "maxTime": 300,
     "bornPoses": [

@@ -18,6 +18,7 @@ module.exports = apiDict;
 let NeedCreateList = [
 
     "LocalDataManager",
+    "TankManager",
 
 ];
 

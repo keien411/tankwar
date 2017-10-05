@@ -1,6 +1,6 @@
 
 var TankType = require("TankData").tankType;
-
+var app = require("app");
 cc.Class({
     extends: cc.Component,
 
@@ -38,6 +38,7 @@ cc.Class({
         //获取组件
         this._cityCtrl = cc.find("/CityScript").getComponent("CityScript");
         this.bulletNode = cc.find("/Canvas/Map/bullet");
+        this.TankManager = app.TankManager();
     },
 
     start: function() {
@@ -50,23 +51,28 @@ cc.Class({
             var self = this;
             //添加AI
             var callback = cc.callFunc(function(){
-                var angles = [0, 90, 180, 270];
-                var index = parseInt(Math.random()*4, 10);
+                var sub = cc.pSub(self.TankManager.GetTankPosition(),self.node.getPosition());
+                //cc.log("node.getPosition()",self.node.getPosition(),"sub",sub);
+                var xAngle = sub.x > 0 ? 0 : 180;
+                var yAngle = sub.y > 0 ? 90 : 270;
+                var angles = [xAngle,yAngle];
+                var index = parseInt(Math.random()*2, 10);
+                //cc.log(angles,index);
                 self.tankMoveStart(angles[index]);
 
                 self.startFire(self._cityCtrl.bulletPool);
 
             }, this);
 
-            var seq = cc.sequence(cc.delayTime(0.3), callback, cc.delayTime(1));
+            var seq = cc.sequence(cc.delayTime(0.2), callback, cc.delayTime(0.2));
             this.node.runAction(cc.repeatForever(seq));
         }
 
     },
 
+
     //添加坦克移动动作
     tankMoveStart: function (angle) {
-
         this.node.rotation = 90 - angle;
 
         if(angle==0 || angle==180 || angle==90){
@@ -80,12 +86,15 @@ cc.Class({
             this.offset = cc.v2(Math.cos(Math.PI/180*angle),
                                 Math.sin(Math.PI/180*angle));
         }
-
+        //cc.log("tankMoveStart","angle",angle,"this.offset",this.offset);
         this.stopMove = false;
     },
 
     //移除坦克移动动作
     tankMoveStop: function () {
+        if(this.tankType == TankType.Player){
+            this.TankManager.SetTankPosition(this.node.getPosition());
+        }
         this.stopMove = true;
     },
 
