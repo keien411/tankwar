@@ -39,6 +39,7 @@ cc.Class({
         this._cityCtrl = cc.find("/CityScript").getComponent("CityScript");
         this.bulletNode = cc.find("/Canvas/Map/bullet");
         this.TankManager = app.TankManager();
+        this.LocalDataManager = app.LocalDataManager();
     },
 
     start: function() {
@@ -51,20 +52,40 @@ cc.Class({
             var self = this;
             //添加AI
             var callback = cc.callFunc(function(){
-                var sub = cc.pSub(self.TankManager.GetTankPosition(),self.node.getPosition());
-                //cc.log("node.getPosition()",self.node.getPosition(),"sub",sub);
-                var xAngle = sub.x > 0 ? 0 : 180;
-                var yAngle = sub.y > 0 ? 90 : 270;
-                var angles = [xAngle,yAngle];
-                var index = parseInt(Math.random()*2, 10);
-                //cc.log(angles,index);
+                var choose = this.LocalDataManager.GetConfigProperty("SysSetting","guankadengji");
+                cc.log(choose,"choose");
+                var angles;
+                var index;
+                switch (choose){
+                    case 0:
+                        angles = [0,90,180,270];
+                        index = parseInt(Math.random()*4, 10);
+                        break
+                    case 1:
+                        var sub = cc.pSub(self.TankManager.GetTankPosition(),self.node.getPosition());
+                        //cc.log("node.getPosition()",self.node.getPosition(),"sub",sub);
+                        var xAngle = sub.x > 0 ? 0 : 180;
+                        var yAngle = sub.y > 0 ? 90 : 270;
+                        angles = [xAngle,yAngle];
+                        index = parseInt(Math.random()*2, 10);
+                    //cc.log(angles,index);
+
+                }
+
                 self.tankMoveStart(angles[index]);
 
                 self.startFire(self._cityCtrl.bulletPool);
 
             }, this);
+            var choose2 = this.LocalDataManager.GetConfigProperty("SysSetting","guankadengji");
+            var seq;
+            if (choose2 == 0){
+                seq = cc.sequence(cc.delayTime(0.2), callback, cc.delayTime(1));
+            }
+            else if (choose2 == 1){
+                seq = cc.sequence(cc.delayTime(0.2), callback, cc.delayTime(0.2));
+            }
 
-            var seq = cc.sequence(cc.delayTime(0.2), callback, cc.delayTime(0.2));
             this.node.runAction(cc.repeatForever(seq));
         }
 

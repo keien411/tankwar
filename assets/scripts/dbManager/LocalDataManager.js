@@ -16,6 +16,7 @@ var LocalDataManager = app.BaseClass.extend({
 							    "SysSetting":{
 											    "nowLevel":1,
                                     			"choeseLevel":1,
+												"guankadengji":0,
 										    },
 						    };
 

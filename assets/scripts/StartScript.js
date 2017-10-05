@@ -26,6 +26,8 @@ cc.Class({
             this.ErrLog("OnInitClientFinish InitModel fail");
             return
         }
+
+        this.LocalDataManager = app.LocalDataManager();
         
     },
 
@@ -52,6 +54,24 @@ cc.Class({
 
     loadChoiceScene: function() {
         cc.director.loadScene("ChoiceScene");
+    },
+
+    normalScene: function() {
+        cc.director.preloadScene("ChoiceScene", function (assets, error){
+            //設置關卡
+            app.LocalDataManager().SetConfigProperty("SysSetting", "guankadengji", 0);
+            //跳转到游戏界面
+            cc.director.loadScene("ChoiceScene");
+        });
+    },
+
+    diffcludeScene: function() {
+        cc.director.preloadScene("ChoiceScene", function (assets, error){
+            //設置關卡
+            app.LocalDataManager().SetConfigProperty("SysSetting", "guankadengji", 1);
+            //跳转到游戏界面
+            cc.director.loadScene("ChoiceScene");
+        });
     },
 
     // called every frame, uncomment this function to activate update callback
